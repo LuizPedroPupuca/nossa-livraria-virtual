@@ -1,8 +1,14 @@
 package br.com.zup.edu.livraria.livro;
 
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
+
 import javax.persistence.*;
 
 @Entity
+@OptimisticLocking(type = OptimisticLockType.ALL)
+@DynamicUpdate
 public class Exemplar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +24,7 @@ public class Exemplar {
         this.livro = livro;
     }
 
+
     /**
      * @deprecated construtor de uso exclusivo do Hibernate
      */
@@ -32,5 +39,13 @@ public class Exemplar {
 
     public Long getId() {
         return id;
+    }
+
+    public boolean isReservado() {
+        return reservado;
+    }
+
+    public Livro getLivro() {
+        return livro;
     }
 }

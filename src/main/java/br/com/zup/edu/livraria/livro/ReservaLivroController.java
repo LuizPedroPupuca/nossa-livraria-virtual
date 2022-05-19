@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@RequestMapping("/livros/{isbn}")
+@RequestMapping("/reservar-livro/{isbn}")
 public class ReservaLivroController {
     private final ExemplarRepository repository;
 
@@ -20,9 +20,12 @@ public class ReservaLivroController {
 
     @PatchMapping
     @Transactional
-    public ResponseEntity<?> reservar(@PathVariable String ISBN) {
-        Exemplar exemplar = repository.findFirstByReservadoisFalseANDLivro_ISBNequals(ISBN)
+    public ResponseEntity<?> reservar(@PathVariable String isbn) {
+        Exemplar exemplar = repository.findFirstByReservadoIsFalseAndLivro_IsbnEquals(isbn)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Não existe exemplar cadastrado para este ISBN"));
+        if (exemplar.isReservado()){
+            return ResponseEntity.unprocessableEntity().build();
+        }
 
         exemplar.reservar();
 
