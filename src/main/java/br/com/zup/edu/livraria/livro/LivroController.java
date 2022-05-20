@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/livro")
@@ -19,9 +21,14 @@ public class LivroController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<?> cadastra(@RequestBody @Valid LivroRequest livroRequest){
+    public ResponseEntity<?> cadastra(@RequestBody @Valid LivroRequest livroRequest,
+                                      UriComponentsBuilder uriComponentsBuilder){
         Livro livro = livroRequest.toModel();
         livroRepository.save(livro);
-        return ResponseEntity.ok().build();
+        URI location = uriComponentsBuilder.path("/video/{id}")
+                .buildAndExpand(livro.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 }
