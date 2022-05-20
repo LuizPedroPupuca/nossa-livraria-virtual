@@ -5,7 +5,10 @@ import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Entity
 public class Livro {
     @Id
@@ -14,7 +17,7 @@ public class Livro {
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name="livro_id")
-    private List<Exemplar> exemplares;
+    private List<Exemplar> exemplares = new ArrayList<>();
 
     @Column(nullable = false)
     private String nome;
@@ -34,12 +37,13 @@ public class Livro {
 
 
 
-    public Livro(List<Exemplar> exemplares, String nome, String resumo, String autor, String isbn) {
+    public Livro(String nome, String resumo, String autor, String isbn, Integer numeroExemplares) {
         this.exemplares = exemplares;
         this.nome = nome;
         this.resumo = resumo;
         this.autor = autor;
         this.isbn = isbn;
+        this.geraExemplares(numeroExemplares);
     }
 
     /**
@@ -71,5 +75,11 @@ public class Livro {
 
     public List<Exemplar> getExemplares() {
         return exemplares;
+    }
+
+    public void geraExemplares(Integer numeroExemplares){
+        for (Integer cont = 1; cont <= numeroExemplares; cont++){
+            exemplares.add(new Exemplar(this));
+        }
     }
 }

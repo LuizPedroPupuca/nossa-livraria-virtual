@@ -3,6 +3,7 @@ package br.com.zup.edu.livraria.livro;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LivroRequest {
@@ -20,17 +21,17 @@ public class LivroRequest {
     private String isbn;
 
     @NotNull
-    private List<Exemplar> exemplares;
+    private Integer numeroExemplares;
 
     public LivroRequest() {
     }
 
-    public LivroRequest(String nome, String resumo, String autor, String isbn, List<Exemplar> exemplares) {
+    public LivroRequest(String nome, String resumo, String autor, String isbn, Integer numeroExemplares) {
         this.nome = nome;
         this.resumo = resumo;
         this.autor = autor;
         this.isbn = isbn;
-        this.exemplares = exemplares;
+        this.numeroExemplares = numeroExemplares;
     }
 
     public String getNome() {
@@ -49,11 +50,13 @@ public class LivroRequest {
         return isbn;
     }
 
-    public List<Exemplar> getExemplares() {
-        return exemplares;
+    public int getNumeroExemplares() {
+        return numeroExemplares;
     }
 
     public Livro toModel() {
-        return new Livro(exemplares, nome, resumo, autor, isbn);
+        return new Livro(nome, resumo, autor, isbn, numeroExemplares);
     }
+
+
 }
