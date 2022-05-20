@@ -77,7 +77,7 @@ public class Livro {
         return exemplares;
     }
 
-    public void geraExemplares(Integer numeroExemplares){
+    private void geraExemplares(Integer numeroExemplares){
         for (Integer cont = 1; cont <= numeroExemplares; cont++){
             exemplares.add(new Exemplar(this));
         }
